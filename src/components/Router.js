@@ -13,18 +13,12 @@ export default ({isLoggedIn})=>{
                 {isLoggedIn 
                 ? 
                 <>
-                 <Route exact path="/">
-                     <Home/>
-                 </Route>
-                 <Route exact path="/profile">
-                     <Profile/>
-                 </Route>
+                 <Route exact path="/"><Home/></Route>
+                 <Route exact path="/profile"><Profile/></Route>
                 </>
                 :
                 <>
-                 <Route exact path="/">
-                     <Auth/>
-                 </Route>
+                 <Route exact path="/"><Auth/></Route>
                 </>}   
             </Switch>
         </Router>
