@@ -7,11 +7,12 @@ function App() {
   const auth = getAuth();
   const [init,setInit]=useState(false) //로딩창으로 대체하면 될듯
   const [isLoggedIn,setIsLoggedIn]=useState(false)
+  const [userObj,setUserObj]=useState(null)
   useEffect(()=>{
     onAuthStateChanged(auth,(user)=>{ //user의 값이 바뀔 때마다 실행됨
-      console.log(auth)
       if(user){ //이미 로그인 했을때
         setIsLoggedIn(true)
+        setUserObj(user)
       } else{
         setIsLoggedIn(false)
       }
@@ -20,7 +21,7 @@ function App() {
   },[])
   return (
     <>
-      {init ? <AppRouter isLoggedIn={isLoggedIn}/> : "Initailizing"}
+      {init ? <AppRouter isLoggedIn={isLoggedIn} userObj={userObj}/> : "Initailizing"}
     </>
   );
 }
