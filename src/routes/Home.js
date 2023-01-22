@@ -43,10 +43,11 @@ export default ({userObj})=>{ //userObj는 유저의 고유한 식별번호
         const theFile=files[0]
         const reader=new FileReader()
         reader.onloadend=(finishedEvent)=>{
+            console.log(finishedEvent)
             const {currentTarget:{result}}=finishedEvent
             setAttachment(result)
         }
-        reader.readAsDataURL(theFile)
+        reader.readAsDataURL(theFile) //이미지를 읽어와서 loadend 이벤트 트리거됨 이미지 데이터가 문자열 데이터로 result 속성에 담겨짐
     }
     const onClearAttachment=()=>setAttachment(null)
     return (
