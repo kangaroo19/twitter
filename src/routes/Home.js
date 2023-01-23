@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { collection, addDoc,serverTimestamp,getDocs,query,onSnapshot,doc, QuerySnapshot, orderBy  } from "firebase/firestore";
-import { dbService } from "fbase";
+import { dbService, storageService} from "fbase";
+import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import Nweet from "components/Nweet";
+import {v4 as uuidv4} from "uuid"
 export default ({userObj})=>{ //userObj는 유저의 고유한 식별번호
     const [nweet,setNweet]=useState("")
     const [nweets,setNweets]=useState([])
@@ -22,17 +24,19 @@ export default ({userObj})=>{ //userObj는 유저의 고유한 식별번호
     },[])
     const onSubmit = async (e) => {
         e.preventDefault();
-        try {
-            const docRef = await addDoc(collection(dbService, "nweets"), {
-              text : nweet,
-              date : serverTimestamp(), //이거때문에 두번호출됨
-              creatorId : userObj.uid
-            }); //위의 객체(nweet)가 Nweet컴포넌트의 nweetObj프롭으로 들어감
-
-          } catch (e) {
-            console.error("Error adding document: ", e);
-          }
+        const AttachmentRef = ref(storageService, `${userObj.uid}/${uuidv4()}`);
+        const response = await uploadString(AttachmentRef, attachment, "data_url");
+        const attachmentUrl=await getDownloadURL(ref(storageService,"123"))
+        const nweetObj={
+            text : nweet,
+            date : Date.now(), //이거때문에 두번호출됨
+            creatorId : userObj.uid,
+            attachmentUrl
+        }
+        
+        const docRef = await addDoc(collection(dbService, "nweets"),nweetObj); //위의 객체(nweet)가 Nweet컴포넌트의 nweetObj프롭으로 들어감
         setNweet("")
+        setAttachment("")
     }
     const onChange=(event)=>{
         const {target:{value}}=event
@@ -43,7 +47,6 @@ export default ({userObj})=>{ //userObj는 유저의 고유한 식별번호
         const theFile=files[0]
         const reader=new FileReader()
         reader.onloadend=(finishedEvent)=>{
-            console.log(finishedEvent)
             const {currentTarget:{result}}=finishedEvent
             setAttachment(result)
         }
