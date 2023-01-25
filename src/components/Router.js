@@ -7,13 +7,13 @@ import Navigation from "./Navigation"
 export default ({isLoggedIn,userObj})=>{
     return (
         <Router>
-            {isLoggedIn && <Navigation/>}
+            {isLoggedIn && <Navigation userObj={userObj}/>}
             <Switch>
                 {isLoggedIn 
                 ? 
                 <>
                  <Route exact path="/"><Home userObj={userObj}/></Route>
-                 <Route exact path="/profile"><Profile/></Route>
+                 <Route exact path="/profile"><Profile userObj={userObj}/></Route>
                 </>
                 :
                 <>
