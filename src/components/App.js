@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import React from "react";
 import AppRouter from "components/Router";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth, onAuthStateChanged, updateProfile } from "firebase/auth";
 import {authService} from "fbase";
 function App() {
   const auth = getAuth();
@@ -12,16 +12,35 @@ function App() {
     onAuthStateChanged(auth,(user)=>{ //user의 값이 바뀔 때마다 실행됨
       if(user){ //이미 로그인 했을때
         setIsLoggedIn(true)
-        setUserObj(user)
+        setUserObj({ //원래는 setUserObj(user)였는데 이렇게 하면 user객체의 크기가 너무 커서 리액트가 변화를 감지 못함 그래서 사용하는 것(이름,아이디,업데이트프로필)만 객체로 전달
+          displayName:user.displayName,
+          uid:user.uid,
+          // updateProfile:(args)=>updateProfile(user,{displayName:user.displayName}) 
+        })
+        
       } else{
+        setUserObj(null)
         setIsLoggedIn(false)
       }
       setInit(true)
     })
   },[])
+  const refreshUser=()=>{
+    const user=authService.currentUser
+    console.log(user)
+    setUserObj({
+      displayName:user.displayName,
+      uid:user.uid,
+      //updateProfile:(args)=>updateProfile(user,{displayName:user.displayName})
+    })
+  }
   return (
     <>
-      {init ? <AppRouter isLoggedIn={isLoggedIn} userObj={userObj}/> : "Initailizing"}
+      {init ? <AppRouter 
+                  refreshUser={refreshUser}
+                  isLoggedIn={isLoggedIn} 
+                  userObj={userObj}/> 
+                  : "Initailizing"}
     </>
   );
 }
