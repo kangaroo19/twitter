@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
 import React from "react";
 import AppRouter from "components/Router";
-import { getAuth, onAuthStateChanged, updateProfile } from "firebase/auth";
+import { getAuth, onAuthStateChanged, updateProfile,signInAnonymously } from "firebase/auth";
 import {authService} from "fbase";
 function App() {
   const auth = getAuth();
+  
   const [init,setInit]=useState(false) //로딩창으로 대체하면 될듯
   const [isLoggedIn,setIsLoggedIn]=useState(false)
   const [userObj,setUserObj]=useState(null)
   useEffect(()=>{
     onAuthStateChanged(auth,(user)=>{ //user의 값이 바뀔 때마다 실행됨
       if(user){ //이미 로그인 했을때
+        console.log(user.uid)
         setIsLoggedIn(true)
         setUserObj({ //원래는 setUserObj(user)였는데 이렇게 하면 user객체의 크기가 너무 커서 리액트가 변화를 감지 못함 그래서 사용하는 것(이름,아이디,업데이트프로필)만 객체로 전달
           displayName:user.displayName,
@@ -34,8 +36,26 @@ function App() {
       //updateProfile:(args)=>updateProfile(user,{displayName:user.displayName})
     })
   }
+  const onClick=()=>{
+    signInAnonymously(auth)
+    .then(() => {
+    console.log(auth.currentUser)
+      setIsLoggedIn(true)
+      setUserObj({
+        displayName:"annymous",
+        uid:auth.currentUser.uid
+      })
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log(errorCode)
+      // ...
+    });
+  }
   return (
     <>
+      <button onClick={onClick}>익명 로그인</button>
       {init ? <AppRouter 
                   refreshUser={refreshUser}
                   isLoggedIn={isLoggedIn} 

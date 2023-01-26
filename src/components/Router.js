@@ -8,7 +8,7 @@ export default ({refreshUser,isLoggedIn,userObj})=>{
     return (
         <Router>
             {isLoggedIn && <Navigation userObj={userObj}/>}
-            <Switch>
+            <Switch><>
                 {isLoggedIn 
                 ? 
                 <div style={{
@@ -25,7 +25,7 @@ export default ({refreshUser,isLoggedIn,userObj})=>{
                 :
                 <>
                  <Route exact path="/"><Auth/></Route>
-                </>}   
+                </>} </>  
             </Switch>
         </Router>
     )

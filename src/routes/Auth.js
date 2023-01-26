@@ -15,6 +15,7 @@ const Auth= ()=>{
         }
         const data=await signInWithPopup(auth,provider)
     }
+   
     return (
         <div className="authContainer">
             <FontAwesomeIcon
