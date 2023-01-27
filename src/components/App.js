@@ -55,7 +55,7 @@ function App() {
   }
   return (
     <>
-      <button onClick={onClick}>익명 로그인</button>
+      {/* <button onClick={onClick}>익명 로그인</button> */}
       {init ? <AppRouter 
                   refreshUser={refreshUser}
                   isLoggedIn={isLoggedIn} 
