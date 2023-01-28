@@ -3,7 +3,25 @@ import { getAuth,signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPass
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faTwitter,faGoogle,faGithub} from "@fortawesome/free-brands-svg-icons";
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import Link from '@mui/material/Link';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import Error from 'components/Error'
+import Copyright from "components/CopyRight";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
 const Auth= ()=>{
+    
+    const [email,setEmail]=useState("")
+    const [password,setPassword]=useState("")
+    const [newAccount,setNewAccount]=useState(true) //true일때는 create acc, false 일때는 login
+    const [error,setError]=useState("")
+    const [open,setOpen]=useState(false)
     const onSocialClick=async(event)=>{
         const auth=getAuth()
         const {target:{name}}=event
@@ -15,22 +33,125 @@ const Auth= ()=>{
         }
         const data=await signInWithPopup(auth,provider)
     }
-   
+    const theme = createTheme();
+    const onChange=(event)=>{
+        const {target:{name,value}}=event
+        if(name==="email"){
+            setEmail(value)
+        }
+        else if(name==="password"){
+            setPassword(value)
+        }
+    }
+    const onSubmit=async(event)=>{ //async함수는 반드시 프로미스 리턴
+        event.preventDefault()
+        const auth = getAuth()
+        try {
+            let data
+            if(newAccount){ //create acc
+                data = await createUserWithEmailAndPassword(auth,email,password)
+                setNewAccount(false)
+
+            }
+            else{ //log in
+                data = await signInWithEmailAndPassword(auth,email,password)
+            }
+        }
+        catch(error){
+            setOpen(true)
+            setError(error.message)
+        }
+    }
+    const toggleAccount=()=>setNewAccount((prev)=>!prev)
     return (
-        <div className="authContainer">
-            <FontAwesomeIcon
+        <ThemeProvider theme={theme}>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <FontAwesomeIcon
                 icon={faTwitter}
                 color={"#04AAFF"}
                 size="3x"
-                style={{ marginBottom: 30 }}
+                style={{ marginBottom: 10 }}
             />
-            <AuthForm/>
-            <div className="authBtns">
-                <button className="authBtn" onClick={onSocialClick} name="google">Continue with Google<FontAwesomeIcon icon={faGoogle} /></button>
-                <button className="authBtn" onClick={onSocialClick} name="github">Continue with Github<FontAwesomeIcon icon={faGithub} /></button>
-            </div>
-        </div>
-    )
+          <Typography component="h1" variant="h5">로그인</Typography>
+          <Box component="form"  noValidate sx={{ mt: 1 }}>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              type="email" 
+              label="이메일"
+              name="email"
+              autoComplete="email"
+              value={email}
+              onChange={onChange}
+              autoFocus
+            />
+            <TextField
+              margin="normal"
+              type="password" 
+              required
+              fullWidth
+              name="password"
+              label="비밀번호"
+              value={password}
+              onChange={onChange}
+              id="password"
+              autoComplete="current-password"
+            />
+            
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+              onClick={onSubmit}
+            >
+              {newAccount ? "계정 생성" : "로그인"}
+            </Button>
+            <Grid container>
+              <Grid item xs>
+                
+              </Grid>
+              <Grid item>
+                <span className="authSwitch" onClick={toggleAccount}>{newAccount ? "로그인 하기" : "계정 생성하기"}</span>
+              </Grid>
+            </Grid>
+            <Button
+              type="submit"
+              fullWidth
+              variant="outlined"
+              sx={{ mt: 3, mb: 2 }}
+              onClick={onSocialClick} 
+              name="google"
+            > 
+            <FontAwesomeIcon icon={faGoogle}></FontAwesomeIcon> Continue With Google
+            </Button>
+            <Button
+              type="submit"
+              fullWidth
+              variant="outlined"
+              sx={{ mt: 3, mb: 2 }}
+            >
+             <FontAwesomeIcon icon={faGithub} />Continue with Github
+            </Button>
+          </Box>
+        </Box>
+        <Copyright/>
+        {open?<Error error={error}/>:null}
+      </Container>
+    </ThemeProvider>
+  );
+    
 }
 export default Auth
 
