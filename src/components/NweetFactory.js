@@ -47,7 +47,7 @@ const NweetFactory=({userObj})=>{
     }
     const onClearAttachment=()=>setAttachment("")
     return (
-        <form onSubmit={onSubmit} className="factoryForm">
+        <form onSubmit={onSubmit} className="factoryForm" >
                 <div className="factoryInput__container">
                     <input className="factoryInput__input" value={nweet} onChange={onChange}type="text" placeholder="what s on your mind" maxLength={120}/>
                     <input className="factoryInput__arrow" type="submit" value="tweet"/>

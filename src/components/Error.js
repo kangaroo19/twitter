@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -7,11 +7,14 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 
 //부모 컴포넌트로 false값 보내는 과정 추가해야됨
-function Error({error}){
+function Error({error,callBack}){
   const [newOpen,setNewOpen]=useState(true)
   const handleClose = () => {
     setNewOpen(false)
   };
+  useEffect(()=>{ //부모 컴포넌트로 값 보냄
+    callBack(newOpen)
+  })
     return (
         <Dialog
         open={newOpen}
@@ -26,7 +29,7 @@ function Error({error}){
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Close</Button>
+          <Button onClick={handleClose}>닫기</Button>
         </DialogActions>
       </Dialog>
     )

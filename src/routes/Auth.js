@@ -1,4 +1,3 @@
-import AuthForm from "components/AuthForm";
 import { getAuth,signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword,signInWithEmailAndPassword, GithubAuthProvider } from "firebase/auth";
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -6,15 +5,14 @@ import {faTwitter,faGoogle,faGithub} from "@fortawesome/free-brands-svg-icons";
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Error from 'components/Error'
 import Copyright from "components/CopyRight";
+import styled from 'styled-components';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
 const Auth= ()=>{
     
     const [email,setEmail]=useState("")
@@ -62,10 +60,20 @@ const Auth= ()=>{
             setError(error.message)
         }
     }
+    function callBack(value){ //자식 컴포넌트의 데이터 부모 컴포넌트(app)로 보내기 위함
+        setOpen(value)
+    }
     const toggleAccount=()=>setNewAccount((prev)=>!prev)
     return (
-        <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
+      <Grid container>
+        <Grid className="auth_intro_container" item xs={8} style={{height:'100vh',}}>
+            <div>
+              <h1 className="auth_intro_header animate__animated animate__fadeIn">당신의 친구들과 함께 대화하세요</h1>
+            </div>
+        </Grid>
+        {/* <Grid item style={{border:'1px solid black'}}> */}
+      <ThemeProvider theme={theme}>
+        <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
           sx={{
@@ -120,10 +128,9 @@ const Auth= ()=>{
             </Button>
             <Grid container>
               <Grid item xs>
-                
               </Grid>
               <Grid item>
-                <span className="authSwitch" onClick={toggleAccount}>{newAccount ? "로그인 하기" : "계정 생성하기"}</span>
+                <span className="login_toggle"  onClick={toggleAccount}>{newAccount ? "로그인 하기" : "계정 생성하기"}</span>
               </Grid>
             </Grid>
             <Button
@@ -134,7 +141,7 @@ const Auth= ()=>{
               onClick={onSocialClick} 
               name="google"
             > 
-            <FontAwesomeIcon icon={faGoogle}></FontAwesomeIcon> Continue With Google
+            <FontAwesomeIcon icon={faGoogle}></FontAwesomeIcon> 구글로 로그인
             </Button>
             <Button
               type="submit"
@@ -142,14 +149,16 @@ const Auth= ()=>{
               variant="outlined"
               sx={{ mt: 3, mb: 2 }}
             >
-             <FontAwesomeIcon icon={faGithub} />Continue with Github
+             <FontAwesomeIcon icon={faGithub} />깃허브로 로그인
             </Button>
           </Box>
         </Box>
         <Copyright/>
-        {open?<Error error={error}/>:null}
+        {open?<Error error={error} callBack={callBack}/>:null}
       </Container>
     </ThemeProvider>
+    </Grid>
+    // </Grid>
   );
     
 }
@@ -162,3 +171,5 @@ export default Auth
 //로그인 성공하면 user정보가 채워지고
 //user값이 변화하는지 지켜보는 app.js컴포넌트의 onAuthStateChanged함수가
 //isloggenin값 변화에 따라 다음 컴포넌트 보여줌
+
+
