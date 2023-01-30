@@ -21,7 +21,7 @@ export default ({userObj})=>{ //userObj는 유저의 고유한 식별번호
     },[])
     
     return (
-        <div className="container" style={{border:'1px solid black'}}>
+        <div className="container" style={{border:'1px solid black',}}>
             <NweetFactory userObj={userObj}/>
             <div style={{ marginTop: 30 }}>
                 {nweets.map((nweet) => (

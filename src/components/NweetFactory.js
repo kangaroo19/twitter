@@ -6,6 +6,9 @@ import { useState } from "react";
 import {v4 as uuidv4} from "uuid"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { Button } from "@mui/material";
+import SendIcon from '@mui/icons-material/Send';
+import TextField from '@mui/material/TextField';
 const NweetFactory=({userObj})=>{
     const [nweet,setNweet]=useState("")
     const [attachment,setAttachment]=useState("")
@@ -48,10 +51,21 @@ const NweetFactory=({userObj})=>{
     const onClearAttachment=()=>setAttachment("")
     return (
         <form onSubmit={onSubmit} className="factoryForm" >
-                <div className="factoryInput__container">
+            <TextField
+                fullWidth={true}
+                id="filled-helperText"
+                label="무슨 일이 일어나고 있나요?"
+                defaultValue=""
+                variant="filled"
+                value={nweet} onChange={onChange}
+                />
+                <Button variant="contained" endIcon={<SendIcon />} onClick={onSubmit}>
+        Send
+      </Button>
+                {/* <div className="factoryInput__container">
                     <input className="factoryInput__input" value={nweet} onChange={onChange}type="text" placeholder="what s on your mind" maxLength={120}/>
                     <input className="factoryInput__arrow" type="submit" value="tweet"/>
-                </div>
+                </div> */}
                 <label htmlFor="attach-file" className="factoryInput__label">
                     <span>Add photos</span>
                     <FontAwesomeIcon icon={faPlus} />
