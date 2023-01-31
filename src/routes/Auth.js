@@ -21,7 +21,7 @@ const Auth= ()=>{
     const [error,setError]=useState("")
     const [open,setOpen]=useState(false)
     const onSocialClick=async(event)=>{
-        const auth=getAuth()
+        const auth=getAuth() //
         const {target:{name}}=event
         let provider
         if(name==="google"){
