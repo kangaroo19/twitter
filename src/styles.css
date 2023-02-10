@@ -52,11 +52,27 @@
   justify-content: center;
   align-items: center;
 }
-@media only screen and (max-width:1200px){
+.container{
+  /* width:70%; */
+  /* margin:0 auto; */
+  border:1px solid black;
+}
+@media only screen and (max-width:800px){
+  /* .container{
+    width:100%;
+  } */
+  .auth_intro_container{
+    display: none;
+  }
   article{
       display:none;
   }
-  
+  .nav-icon{
+    font-size: 2.5rem;
+  }
+  .nav-span{
+    display: none;
+  }
   .nav-link>span{
     display:none;
   }

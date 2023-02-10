@@ -49,19 +49,19 @@ const NweetFactory=({userObj})=>{
         reader.readAsDataURL(theFile) //이미지를 읽어와서 loadend 이벤트 트리거됨 이미지 데이터가 문자열 데이터로 result 속성에 담겨짐
     }
     const onClearAttachment=()=>setAttachment("")
+    
+
     return (
         <form onSubmit={onSubmit} className="factoryForm" >
             <TextField
-                fullWidth={true}
+                fullWidth
                 id="filled-helperText"
                 label="무슨 일이 일어나고 있나요?"
                 defaultValue=""
                 variant="filled"
                 value={nweet} onChange={onChange}
                 />
-                <Button variant="contained" endIcon={<SendIcon />} onClick={onSubmit}>
-        Send
-      </Button>
+            <Button variant="contained" endIcon={<SendIcon />} onClick={onSubmit}>Send</Button>
                 {/* <div className="factoryInput__container">
                     <input className="factoryInput__input" value={nweet} onChange={onChange}type="text" placeholder="what s on your mind" maxLength={120}/>
                     <input className="factoryInput__arrow" type="submit" value="tweet"/>
