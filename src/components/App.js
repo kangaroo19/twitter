@@ -12,12 +12,13 @@ function App() {
   useEffect(()=>{
     onAuthStateChanged(auth,(user)=>{ //user의 값이 바뀔 때마다 실행됨
       if(user){ //이미 로그인 했을때
-        console.log(user.uid)
+        console.log(user)
         setIsLoggedIn(true)
         setUserObj({ //원래는 setUserObj(user)였는데 이렇게 하면 user객체의 크기가 너무 커서 리액트가 변화를 감지 못함 그래서 사용하는 것(이름,아이디,업데이트프로필)만 객체로 전달
           displayName:user.displayName,
           uid:user.uid,
-          // updateProfile:(args)=>updateProfile(user,{displayName:user.displayName}) 
+          userImg:user.photoURL,
+          updateProfile:(args)=>updateProfile(user,{displayName:user.displayName}) 
         })
         
       } else{
@@ -33,13 +34,12 @@ function App() {
     setUserObj({
       displayName:user.displayName,
       uid:user.uid,
-      //updateProfile:(args)=>updateProfile(user,{displayName:user.displayName})
+      updateProfile:(args)=>updateProfile(user,{displayName:user.displayName})
     })
   }
   const onClick=()=>{
     signInAnonymously(auth)
     .then(() => {
-    console.log(auth.currentUser)
       setIsLoggedIn(true)
       setUserObj({
         displayName:"annymous",

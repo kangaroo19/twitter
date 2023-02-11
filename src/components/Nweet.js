@@ -7,6 +7,15 @@ import { dbService } from "fbase";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faPencilAlt } from "@fortawesome/free-solid-svg-icons";
+
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import Divider from '@mui/material/Divider';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import Avatar from '@mui/material/Avatar';
+import Typography from '@mui/material/Typography';
+
 const Nweet=({nweetObj,isOwner})=>{
 
     const [editing,setEditing]=useState(false) //edit form 토글버튼 위함 true면 edit form 나옴
@@ -46,21 +55,44 @@ const Nweet=({nweetObj,isOwner})=>{
                         </form>
                         <span onClick={toggleEditing} className="formBtn cancelBtn">Cancel</span>
                     </>
-                ) : (
-                    <>
-                        <h4>{nweetObj.text}</h4>
-                        {nweetObj.attachmentUrl && <img src={nweetObj.attachmentUrl} />}
-                        {isOwner && ( 
-                            <div className="nweet__actions">
-                            <span onClick={onDeleteClick}>
-                            <FontAwesomeIcon icon={faTrash} />
-                          </span>
-                          <span onClick={toggleEditing}>
-                            <FontAwesomeIcon icon={faPencilAlt} />
-                          </span>
-                        </div>
-                        )}
-                    </>
+                ) : (<List sx={{ width: '100%',  bgcolor: 'background.paper' }} >
+                <ListItem alignItems="flex-start" divider>
+                  <ListItemAvatar>
+                    <Avatar alt="Remy Sharp" src={nweetObj.creatorImg} />
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={nweetObj.creatorName}
+                    secondary={
+                      <React.Fragment>
+                        <Typography
+                          sx={{ display: 'inline' }}
+                          component="span"
+                          variant="body2"
+                          color="text.primary"
+                        >
+                          
+                        </Typography>
+                        {nweetObj.text}
+                      </React.Fragment>
+                    }
+                  />
+                </ListItem>
+                </List>
+                    // <>
+                    
+                    //     <h4>{nweetObj.creatorName}:{nweetObj.text}</h4>
+                    //     {nweetObj.attachmentUrl && <img src={nweetObj.attachmentUrl} />}
+                    //     {isOwner && ( 
+                    //         <div className="nweet__actions">
+                    //         <span onClick={onDeleteClick}>
+                    //         <FontAwesomeIcon icon={faTrash} />
+                    //       </span>
+                    //       <span onClick={toggleEditing}>
+                    //         <FontAwesomeIcon icon={faPencilAlt} />
+                    //       </span>
+                    //     </div>
+                    //     )}
+                    // </>
             )}
         </div>
     )

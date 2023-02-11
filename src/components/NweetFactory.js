@@ -27,6 +27,8 @@ const NweetFactory=({userObj})=>{
             text : nweet,
             date : Date.now(), 
             creatorId : userObj.uid,
+            creatorName:userObj.displayName,
+            creatorImg:userObj.userImg,
             attachmentUrl
         }
         //위의 객체(nweet)가 Nweet컴포넌트의 nweetObj프롭으로 들어감

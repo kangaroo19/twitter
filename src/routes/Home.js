@@ -17,6 +17,7 @@ export default ({userObj})=>{ //userObj는 유저의 고유한 식별번호
                 })
             })
             setNweets(arr)
+
         })
     },[])
     

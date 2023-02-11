@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { HashRouter as Router,Route,Switch } from "react-router-dom";
 import Auth from "../routes/Auth";
 import Home from "../routes/Home";
+import Lists from "./Lists"
 import Profile from "routes/Profile";
 import Navigation from "./Navigation"
 import { Grid } from "@mui/material";
@@ -151,11 +152,11 @@ export default ({refreshUser,isLoggedIn,userObj},props)=>{
                         <Grid >
                                 
                         <Grid container>
-                            <Grid item xs={8}>
+                            <Grid item xs={8} style={{borderRight:'1px solid black',borderLeft:'1px solid black'}}>
                                 <Route exact path="/"><Home userObj={userObj}/></Route>
                             </Grid>
                             <Grid item xs={4}>
-                                {/* 친구목록 컴포넌트 추가 미디어 쿼리 고려해야됨 */}
+                                <Lists userObj={userObj}/>
                             </Grid>
                         </Grid>
                         <Route exact path="/profile"><Profile userObj={userObj} refreshUser={refreshUser}/></Route>

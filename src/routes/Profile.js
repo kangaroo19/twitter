@@ -26,15 +26,15 @@ export default ({refreshUser,userObj})=>{
             refreshUser() //이 함수는 appjs에서 정의됨 //바뀐 user이름을 리랜더링 위해 부모컴포넌트(app.js)로 보냄
         }
     }
-    const getMyNweets=async()=>{
-        const q = query(collection(dbService, "nweets"), where("creatorId", "==", userObj.uid),orderBy("date","desc")) //where,orderby는 sql 쿼리문 생각하면 됨
-        const querySnapshot = await getDocs(q);
-        querySnapshot.forEach((doc) => {
-        });
-    }
-    useEffect(()=>{
-        getMyNweets()
-    },[])
+    // const getMyNweets=async()=>{
+    //     const q = query(collection(dbService, "nweets"), where("creatorId", "==", userObj.uid),orderBy("date","desc")) //where,orderby는 sql 쿼리문 생각하면 됨
+    //     const querySnapshot = await getDocs(q);
+    //     querySnapshot.forEach((doc) => {
+    //     });
+    // }
+    // useEffect(()=>{
+    //     getMyNweets()
+    // },[])
     return (
         <div className="container">
             <form onSubmit={onSubmit} className="profileForm">

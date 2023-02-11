@@ -13,6 +13,8 @@ import Error from 'components/Error'
 import Copyright from "components/CopyRight";
 import styled from 'styled-components';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { doc, setDoc } from "firebase/firestore";
+import { dbService } from "fbase";
 const Auth= ()=>{
     
     const [email,setEmail]=useState("")
@@ -30,6 +32,15 @@ const Auth= ()=>{
             provider=new GithubAuthProvider()
         }
         const data=await signInWithPopup(auth,provider)
+        .then(async(result)=>{
+          console.log(result)
+          const {uid,displayName,photoURL}=result.user
+          await setDoc(doc(dbService,"users",`${uid}`),{
+            uid:`${uid}`,
+            userName:`${displayName}`,
+            userImg:`${photoURL}`
+          })
+        })
     }
     const theme = createTheme();
     const onChange=(event)=>{
@@ -48,11 +59,29 @@ const Auth= ()=>{
             let data
             if(newAccount){ //create acc
                 data = await createUserWithEmailAndPassword(auth,email,password)
+                .then(async(result)=>{
+                  console.log(result)
+                  const {uid,displayName,photoURL}=result.user
+                  await setDoc(doc(dbService,"users",`${uid}`),{
+                    uid:`${uid}`,
+                    userName:`${displayName}`,
+                    userImg:`${photoURL}`
+                  })
+                })
                 setNewAccount(false)
+                
 
             }
             else{ //log in
                 data = await signInWithEmailAndPassword(auth,email,password)
+                .then(async(result)=>{
+                  const {uid,displayName,photoURL}=result.user
+                  await setDoc(doc(dbService,"users",`${uid}`),{
+                    uid:`${uid}`,
+                    userName:`${displayName}`,
+                    userImg:`${photoURL}`
+                  })
+                })
             }
         }
         catch(error){
@@ -148,6 +177,8 @@ const Auth= ()=>{
               fullWidth
               variant="outlined"
               sx={{ mt: 3, mb: 2 }}
+              name="github"
+              onClick={onSocialClick}
             >
              <FontAwesomeIcon icon={faGithub} />깃허브로 로그인
             </Button>
