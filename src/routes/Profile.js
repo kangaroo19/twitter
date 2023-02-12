@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect,useRef } from "react";
 import { getAuth, signOut, updateProfile } from "firebase/auth";
 import { useHistory} from "react-router-dom";
 import { dbService } from "fbase";
@@ -8,10 +8,11 @@ import {authService} from "fbase";
 
 export default ({refreshUser,userObj})=>{
     const [newDisplayName,setNewDisplayName]=useState(userObj.displayName)
+    const newUserImg=useRef(userObj.userImg)
     const history=useHistory() //useHistory가 react-router-dom 버전 6에서는 useNavigate로 바뀜 (현재버전 5)
     const auth=getAuth()
-    const onLogOutClick=()=>{
-        signOut(auth)
+    const onLogOutClick=async()=>{
+        await signOut(auth)
         history.push("/") //homepage로 리다이렉트
     }
     const onChange=(event)=>{
@@ -21,8 +22,7 @@ export default ({refreshUser,userObj})=>{
     const onSubmit=async(event)=>{
         event.preventDefault()
         if(userObj.displayName!==newDisplayName){
-            const auth=getAuth()
-            await updateProfile(authService.currentUser, { displayName: newDisplayName });
+            await updateProfile(authService.currentUser, { displayName: newDisplayName,userImg:newUserImg });
             refreshUser() //이 함수는 appjs에서 정의됨 //바뀐 user이름을 리랜더링 위해 부모컴포넌트(app.js)로 보냄
         }
     }
@@ -41,6 +41,7 @@ export default ({refreshUser,userObj})=>{
                 <input className="formInput" autoFocus onChange={onChange} type="text" placeholder="Display name" value={newDisplayName}/>
                 <input className="formBtn" type="submit" value="Update Profile" style={{marginTop: 10,}}/>
             </form>   
+            <img src={userObj.userImg}></img>
             <span className="formBtn cancelBtn logOut" onClick={onLogOutClick}>Log Out</span>
         </div>
     )

@@ -1,9 +1,9 @@
-import React from "react";
-import {doc,deleteDoc, updateDoc} from 'firebase/firestore'
+import React, { useEffect } from "react";
+import {doc,deleteDoc, updateDoc, getDoc} from 'firebase/firestore'
 import { getStorage, ref, deleteObject } from "firebase/storage";
 import { storageService } from "fbase";
 import { getDatabase, child, get } from "firebase/database";
-import { dbService } from "fbase";
+import { dbService,authService } from "fbase";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faPencilAlt } from "@fortawesome/free-solid-svg-icons";
@@ -38,7 +38,15 @@ const Nweet=({nweetObj,isOwner})=>{
         const {target:{value}}=event
         setNewNweet(value)
     }
-    
+    // if(authService.currentUser.uid===nweetObj.creatorId && authService.currentUser.displayName!==nweetObj.creatorName){
+    //   console.log(nweetObj.id)
+    //   return async()=>{
+    //     await updateDoc(doc(dbService,"nweets",`${nweetObj.id}`),{creatorName:authService.currentUser.displayName})
+    //   }
+    // }
+    useEffect(()=>{ //나중에 오류날수도 , 로그아웃시 오류남
+      updateDoc(doc(dbService,"nweets",`${nweetObj.id}`),{creatorName:authService.currentUser.displayName})
+    },[authService.currentUser.displayName])
     return (
         <div className="nweet">
            {

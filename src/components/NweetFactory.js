@@ -13,6 +13,7 @@ const NweetFactory=({userObj})=>{
     const [nweet,setNweet]=useState("")
     const [attachment,setAttachment]=useState("")
     const onSubmit = async (e) => {
+        console.log(userObj)
         if (nweet === "") {
             return;
           }
@@ -23,13 +24,14 @@ const NweetFactory=({userObj})=>{
             const response = await uploadString(attachmentRef, attachment, "data_url"); //storage 안의 폴더에 이미지 넣는 작업 , uploadString은 uploadResult를 프로미스형태로 반환,uploadResult는 upload된 폴더의 참조가 담겨있는 ref속성 있음
             attachmentUrl=await getDownloadURL(response.ref) //이미지가 저장된 storage주소 받을 수 있음,getdownloadUrl 메소드의 인자로는 생성된 폴더의 참조가 들어가야함
         }
+        
         const nweetObj={
             text : nweet,
             date : Date.now(), 
             creatorId : userObj.uid,
             creatorName:userObj.displayName,
             creatorImg:userObj.userImg,
-            attachmentUrl
+            attachmentUrl  
         }
         //위의 객체(nweet)가 Nweet컴포넌트의 nweetObj프롭으로 들어감
         const docRef = await addDoc(collection(dbService, "nweets"),nweetObj); 
@@ -59,9 +61,9 @@ const NweetFactory=({userObj})=>{
                 fullWidth
                 id="filled-helperText"
                 label="무슨 일이 일어나고 있나요?"
-                defaultValue=""
+                // defaultValue="" //여기서 오류발생 
                 variant="filled"
-                value={nweet} onChange={onChange}
+                value={nweet} onChange={onChange} 
                 />
             <Button variant="contained" endIcon={<SendIcon />} onClick={onSubmit}>Send</Button>
                 {/* <div className="factoryInput__container">

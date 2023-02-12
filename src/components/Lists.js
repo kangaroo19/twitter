@@ -8,10 +8,8 @@ function Lists({userObj}){
         const q=query(collection(dbService,"users"))
         const un=onSnapshot(q,(querySnapshot)=>{
         const array=[]
-        console.log(userObj.displayName)
         querySnapshot.forEach((doc)=>{
             array.push(doc.data())
-            console.log(array)
         })
         setUsers(array)
         
